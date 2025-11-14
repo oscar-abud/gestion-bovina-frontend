@@ -1,0 +1,67 @@
+.container-home {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0px;
+}
+
+.contenedorVacas {
+  max-height: 55vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 330px;
+}
+
+.cow-card {
+  max-width: 500px;
+  width: 100%;
+}
+
+.containerFilterAndCows {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* Tarjeta del filtro */
+.containerFilter {
+  min-width: 280px;
+  max-width: 330px;
+  width: 100%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+/* Inputs dentro del filtro */
+.containerFilter input,
+.containerFilter select {
+  padding: 6px 8px;
+  border: none;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+/* Un poco más de estilo a los títulos */
+.containerFilter h5 {
+  width: 100%;
+  text-align: left;
+}
