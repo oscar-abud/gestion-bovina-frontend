@@ -63,14 +63,9 @@ function Cows() {
         if (filterData.genre !== "") {
           params.append("genre", filterData.genre);
         }
-        // Limpiando filtros si se buscan vacas eliminadas
-        if (!filterData.cowState) {
-          filterData.diio = "";
-          filterData.genre = "";
-        }
 
         const queryString = params.toString();
-        if (queryString && filterData.cowState) {
+        if (queryString) {
           url += `?${queryString}`;
         }
 
@@ -130,7 +125,7 @@ function Cows() {
             onChange={(e) =>
               setFilterData((prev) => ({ ...prev, diio: e.target.value }))
             }
-            disabled={loadingCow || !filterData.cowState}
+            disabled={loadingCow}
           />
         </div>
         {/* Genero  */}
@@ -145,7 +140,7 @@ function Cows() {
             onChange={(e) =>
               setFilterData((prev) => ({ ...prev, genre: e.target.value }))
             }
-            disabled={loadingCow || !filterData.cowState}
+            disabled={loadingCow}
           >
             <option value="">Seleccionar Género</option>
             <option value="M">Macho</option>
@@ -225,6 +220,7 @@ function Cows() {
         {!loadingCow && !error && cowData.length > 0 && (
           <div className="w-100 d-flex flex-column align-items-center gap-2">
             <h3>{viewCowState ? "Vacas activas" : "Vacas eliminadas"}</h3>
+            <h5>Vacas: {cowData.length}</h5>
             {cowData.map((cow) => (
               <div
                 key={cow._id}
