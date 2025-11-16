@@ -272,7 +272,7 @@ function Cows() {
         {!loadingCow && !error && cowData.length > 0 && (
           <div className="w-100 d-flex flex-column align-items-center gap-2">
             <h3>{viewCowState ? "Vacas activas" : "Vacas eliminadas"}</h3>
-            <h5>Vacas: {cowData.length}</h5>
+            <h5>Total: {cowData.length}</h5>
             {cowData.map((cow) => (
               <div
                 key={cow._id}
