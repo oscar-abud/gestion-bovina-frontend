@@ -116,7 +116,6 @@ export default function RegisterCow({ cowId }) {
       return;
     }
 
-    // armamos el payload como lo espera tu backend
     const payload = {
       diio: Number(values.diio),
       dateBirthday: values.date,

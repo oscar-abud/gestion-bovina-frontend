@@ -18,7 +18,6 @@ function CowCard({ cowDetail, onDelete }) {
   };
 
   const handleUpdateClick = () => {
-    // Coincide con la ruta que definimos en App.jsx
     navigate(`/vacas/${cowDetail._id}/editar`);
   };
 
