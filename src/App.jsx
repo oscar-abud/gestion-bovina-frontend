@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/crear" element={<VacaForm />} />
+        <Route path="/vacas/:id/editar" element={<VacaForm />} />
         <Route path="/reportes" element={<Reportes />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

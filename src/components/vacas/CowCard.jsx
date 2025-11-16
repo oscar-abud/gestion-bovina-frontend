@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import vacaImagen from "../../../public/cow-svgrepo-com.svg";
 import "./vacas.css";
 
 function CowCard({ cowDetail, onDelete }) {
+  const navigate = useNavigate();
+
   const imgStyle = {
     maxWidth: "120px",
     borderRadius: "50%",
@@ -12,6 +15,11 @@ function CowCard({ cowDetail, onDelete }) {
 
   const handleDeleteClick = () => {
     onDelete && onDelete(cowDetail._id);
+  };
+
+  const handleUpdateClick = () => {
+    // Coincide con la ruta que definimos en App.jsx
+    navigate(`/vacas/${cowDetail._id}/editar`);
   };
 
   return (
@@ -48,12 +56,16 @@ function CowCard({ cowDetail, onDelete }) {
         </div>
       </div>
       {/* Botones */}
-      <div className="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0 ms-md-auto">
-        <button className="btn btn-primary">Actualizar</button>
-        <button className="btn btn-danger" onClick={handleDeleteClick}>
-          Eliminar
-        </button>
-      </div>
+      {cowDetail.cowState && (
+        <div className="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0 ms-md-auto">
+          <button className="btn btn-primary" onClick={handleUpdateClick}>
+            Actualizar
+          </button>
+          <button className="btn btn-danger" onClick={handleDeleteClick}>
+            Eliminar
+          </button>
+        </div>
+      )}
     </div>
   );
 }

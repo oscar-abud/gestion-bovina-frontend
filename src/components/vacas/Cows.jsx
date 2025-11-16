@@ -9,8 +9,11 @@ function Cows() {
   const [filterData, setFilterData] = useState({
     diio: "",
     genre: "",
+    cowState: true,
   });
   const [searchButton, setSearchButton] = useState(0);
+  // Estado para mostrar el estado de la vaca (activa/eliminada)
+  const [viewCowState, setViewCowState] = useState(true);
 
   const handleRetry = () => {
     setError(null);
@@ -48,7 +51,10 @@ function Cows() {
         setLoadingCow(true);
         setError(null);
 
-        let url = "http://localhost:3000/vacas";
+        let url = filterData.cowState
+          ? "http://localhost:3000/vacas"
+          : "http://localhost:3000/vacas/desactivadas";
+
         const params = new URLSearchParams();
 
         if (filterData.diio.trim() !== "") {
@@ -57,9 +63,14 @@ function Cows() {
         if (filterData.genre !== "") {
           params.append("genre", filterData.genre);
         }
+        // Limpiando filtros si se buscan vacas eliminadas
+        if (!filterData.cowState) {
+          filterData.diio = "";
+          filterData.genre = "";
+        }
 
         const queryString = params.toString();
-        if (queryString) {
+        if (queryString && filterData.cowState) {
           url += `?${queryString}`;
         }
 
@@ -88,12 +99,15 @@ function Cows() {
     fetchCowData();
   }, [retry, searchButton]);
 
+  console.log(filterData);
+
   const handleSearchClick = () => {
+    setViewCowState(filterData.cowState);
     setSearchButton((prev) => prev + 1);
   };
 
   const handleClearFilters = () => {
-    setFilterData({ diio: "", genre: "" });
+    setFilterData({ diio: "", genre: "", cowState: true });
     setSearchButton((prev) => prev + 1);
   };
 
@@ -102,7 +116,7 @@ function Cows() {
       {/* FILTRO */}
       <div className="containerFilter">
         <h5 className="fw-bold mb-2">Filtrar Vaca</h5>
-
+        {/* DIIO */}
         <div className="w-100">
           <label htmlFor="diio" className="form-label fw-bold">
             DIIO
@@ -116,9 +130,10 @@ function Cows() {
             onChange={(e) =>
               setFilterData((prev) => ({ ...prev, diio: e.target.value }))
             }
+            disabled={loadingCow || !filterData.cowState}
           />
         </div>
-
+        {/* Genero  */}
         <div className="w-100">
           <label htmlFor="genre" className="form-label fw-bold">
             Género
@@ -130,10 +145,31 @@ function Cows() {
             onChange={(e) =>
               setFilterData((prev) => ({ ...prev, genre: e.target.value }))
             }
+            disabled={loadingCow || !filterData.cowState}
           >
             <option value="">Seleccionar Género</option>
             <option value="M">Macho</option>
             <option value="F">Hembra</option>
+          </select>
+        </div>
+        {/* Activos */}
+        <div className="w-100">
+          <label htmlFor="cowState" className="form-label fw-bold">
+            Estado de la Vaca
+          </label>
+          <select
+            id="cowState"
+            className="w-100"
+            value={String(filterData.cowState)} // "true" o "false"
+            onChange={(e) =>
+              setFilterData((prev) => ({
+                ...prev,
+                cowState: e.target.value === "true", // lo vuelve boolean
+              }))
+            }
+          >
+            <option value={true}>Activos</option>
+            <option value={false}>Eliminados</option>
           </select>
         </div>
 
@@ -172,7 +208,7 @@ function Cows() {
       <div className="contenedorVacas">
         {loadingCow && (
           <div className="w-100 d-flex justify-content-center align-items-center">
-            <p className="h5 mt-3 mb-0">Cargando datos de las vacas...</p>
+            <p className="h1 mt-5 mb-0">Cargando datos de las vacas...</p>
           </div>
         )}
 
@@ -188,6 +224,7 @@ function Cows() {
 
         {!loadingCow && !error && cowData.length > 0 && (
           <div className="w-100 d-flex flex-column align-items-center gap-2">
+            <h3>{viewCowState ? "Vacas activas" : "Vacas eliminadas"}</h3>
             {cowData.map((cow) => (
               <div
                 key={cow._id}
