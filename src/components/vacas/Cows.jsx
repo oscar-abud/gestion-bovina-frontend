@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import CowCard from "./CowCard";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 function Cows() {
   const [cowData, setCowData] = useState([]);
@@ -18,6 +20,43 @@ function Cows() {
   const handleRetry = () => {
     setError(null);
     setRetry((prev) => prev + 1);
+  };
+
+  //Funcion para exportar
+  const exportToExcel = () => {
+    if (!cowData || cowData.length === 0) {
+      alert("No hay vacas para exportar.");
+      return;
+    }
+
+    const rows = cowData.map((cow) => ({
+      Diio: cow.diio,
+      Género: cow.genre === "M" ? "Macho" : "Hembra",
+      Raza: cow.race,
+      "Fecha de nacimiento": cow.dateBirthday
+        ? cow.dateBirthday.slice(0, 10)
+        : "",
+      Ubicación: cow.location,
+      Enfermedad: cow.sick || "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Vacas");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const data = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    const fileName = viewCowState
+      ? "vacas_activas.xlsx"
+      : "vacas_eliminadas.xlsx";
+    saveAs(data, fileName);
   };
 
   // DELETE vaca
@@ -199,7 +238,7 @@ function Cows() {
         )}
       </div>
 
-      {/* LISTADO / MENSAJES A LA DERECHA */}
+      {/* LISTADO */}
       <div className="contenedorVacas">
         {loadingCow && (
           <div className="w-100 d-flex justify-content-center align-items-center">
@@ -214,6 +253,19 @@ function Cows() {
         {!loadingCow && !error && cowData.length === 0 && (
           <div className="alert alert-info w-100 text-center">
             No hay vacas registradas.
+          </div>
+        )}
+
+        {/* Botón exportar */}
+        {!loadingCow && !error && cowData.length > 0 && (
+          <div className="w-100 d-flex justify-content-end mb-2">
+            <button
+              className="btn btn-success"
+              type="button"
+              onClick={exportToExcel}
+            >
+              Exportar vacas a Excel
+            </button>
           </div>
         )}
 
