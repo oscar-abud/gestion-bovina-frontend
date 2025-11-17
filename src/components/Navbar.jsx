@@ -1,18 +1,32 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
+import { useState } from "react";
 
 const NavLinks = ({ onNavigate }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const links = [
     { to: "/inicio", label: "Inicio" },
     { to: "/crear", label: "Crear Vaca" },
     { to: "/reportes", label: "Reportes" },
-    { to: "/login", label: "Cerrar sesión" },
   ];
+
   const isActive = (to) =>
     to === "/inicio" ? pathname === "/inicio" : pathname.startsWith(to);
+
+  const handleLogout = () => {
+    // Limpiar autenticación
+    localStorage.removeItem("token");
+    localStorage.removeItem("isAuthenticated");
+
+    // Cerrar offcanvas si viene de mobile
+    onNavigate && onNavigate();
+
+    // Navegar al login
+    navigate("/login", { replace: true });
+  };
 
   return (
     <ul className="navbar-nav ms-lg-auto gap-3">
@@ -27,6 +41,17 @@ const NavLinks = ({ onNavigate }) => {
           </Link>
         </li>
       ))}
+
+      {/* Cerrar sesión */}
+      <li className="nav-item">
+        <button
+          type="button"
+          className="nav-link btn btn-link px-0"
+          onClick={handleLogout}
+        >
+          Cerrar sesión
+        </button>
+      </li>
     </ul>
   );
 };
