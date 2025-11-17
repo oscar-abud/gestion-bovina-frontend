@@ -3,3 +3,9 @@
   grid-template-rows: auto 1fr auto;
   min-height: 100dvh;
 }
+
+#container-login {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100dvh;
+}

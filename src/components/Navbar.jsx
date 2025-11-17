@@ -6,12 +6,13 @@ import Button from "react-bootstrap/Button";
 const NavLinks = ({ onNavigate }) => {
   const { pathname } = useLocation();
   const links = [
-    { to: "/", label: "Inicio" },
+    { to: "/inicio", label: "Inicio" },
     { to: "/crear", label: "Crear Vaca" },
     { to: "/reportes", label: "Reportes" },
+    { to: "/login", label: "Cerrar sesión" },
   ];
   const isActive = (to) =>
-    to === "/" ? pathname === "/" : pathname.startsWith(to);
+    to === "/inicio" ? pathname === "/inicio" : pathname.startsWith(to);
 
   return (
     <ul className="navbar-nav ms-lg-auto gap-3">

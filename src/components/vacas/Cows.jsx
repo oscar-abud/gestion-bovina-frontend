@@ -67,8 +67,12 @@ function Cows() {
     if (!confirmDelete) return;
 
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch(`http://localhost:3000/vacas/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!res.ok) {
@@ -89,6 +93,7 @@ function Cows() {
       try {
         setLoadingCow(true);
         setError(null);
+        const token = localStorage.getItem("token");
 
         let url = filterData.cowState
           ? "http://localhost:3000/vacas"
@@ -108,7 +113,11 @@ function Cows() {
           url += `?${queryString}`;
         }
 
-        const res = await fetch(url);
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!res.ok) {
           const msg = await res.text();

@@ -59,8 +59,13 @@ export default function RegisterCow({ cowId }) {
       try {
         setLoadingInitial(true);
         setSubmitError(null);
+        const token = localStorage.getItem("token");
 
-        const res = await fetch(`http://localhost:3000/vacas/${cowId}`);
+        const res = await fetch(`http://localhost:3000/vacas/${cowId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!res.ok) {
           const msg = await res.text();
@@ -131,11 +136,12 @@ export default function RegisterCow({ cowId }) {
         : "http://localhost:3000/vacas";
 
       const method = isEditMode ? "PUT" : "POST";
-
+      const token = localStorage.getItem("token");
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
