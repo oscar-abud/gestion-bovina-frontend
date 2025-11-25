@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -23,13 +23,56 @@ export default function DataTable() {
   // Valores: Producción 75%, Fertilidad 50%, Salud 90%
   // Producción diaria: 25 L ; Producción mensual: 750 L
   const chartRef = useRef(null);
+  const [vacas, setVacas] = useState([])
+  const [vacasSanas, setVacasSanas] = useState([])
+  const [vacasEnfermas, setVacasEnfermas] = useState([])
+  const [vacasHembras, setVacasHembras] = useState([])
+  const [vacasMachos, setVacasMachos] = useState([])
+  
+  useEffect(() => {
+    const getVacas = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:3000/vacas/all", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
+        const data = await res.json()
+        // Obtener total de las vacas activas e inactivas
+        setVacas(data)
+        // Filtrar vacas sanas
+        setVacasSanas(data.filter(v => v.sick === null));
+        // Filtrar vacas enfermas
+        setVacasEnfermas(data.filter(v => v.sick !== null));
+        // Filtrar vacas hembras
+        setVacasHembras(data.filter(v => v.genre === "F"));
+        // Filtrar vacas machos
+        setVacasMachos(data.filter(v => v.genre === "M"));
+
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getVacas()
+  }, [])
+
+  console.log("Total de vacas",vacas.length)
+  console.log("Vacas sanas",vacasSanas.length)
+  console.log("Total enfermas",vacasEnfermas.length)
+  console.log("Total hembras",vacasHembras.length)
+  console.log("Total machos",vacasMachos.length)
+
+  console.log(vacas)
+  
   const data = {
-    labels: ["Producción", "Fertilidad", "Salud"],
+    labels: ["Vacas activas/inactivas", "Sanas", "Enfermas", "Hembras", "Machos"],
     datasets: [
       {
-        label: "Valores (%)",
-        data: [75, 50, 90],
+        label: "Valores",
+        data: [vacas.length, vacasSanas.length, vacasEnfermas.length, vacasHembras.length, vacasMachos.length],
         backgroundColor: "rgba(75, 182, 192, 0.5)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -43,14 +86,14 @@ export default function DataTable() {
     maintainAspectRatio: false,
     plugins: {
       legend: { position: "top" },
-      title: { display: true, text: "Reporte - Valores (%)" },
+      title: { display: true, text: "Reporte - Valores" },
       tooltip: { mode: "index", intersect: false },
     },
     scales: {
       y: {
         suggestedMin: 0,
-        suggestedMax: 100,
-        ticks: { callback: (v) => `${v}%` },
+        suggestedMax: vacas.length + 1,
+        ticks: { callback: (v) => `${v}` },
         grid: { drawBorder: false },
       },
       x: { grid: { display: false } },
@@ -78,7 +121,7 @@ export default function DataTable() {
               <div className="card-body">
                 <h2 className="h5">Producción diaria</h2>
                 <p className="mb-0">
-                  Cantidad: <strong>25 L</strong>
+                  Cantidad: <strong>{vacas.length * 7} L</strong>
                 </p>
               </div>
             </div>
@@ -88,7 +131,7 @@ export default function DataTable() {
               <div className="card-body">
                 <h2 className="h5">Producción mensual</h2>
                 <p className="mb-0">
-                  Total: <strong>750 L</strong>
+                  Total: <strong>{vacas.length * 45} L</strong>
                 </p>
               </div>
             </div>
