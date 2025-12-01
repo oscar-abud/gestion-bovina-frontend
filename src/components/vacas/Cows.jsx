@@ -68,7 +68,7 @@ function Cows() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/vacas/${id}`, {
+      const res = await fetch(`https://api-gestion-bovina.onrender.com/vacas/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,8 +96,8 @@ function Cows() {
         const token = localStorage.getItem("token");
 
         let url = filterData.cowState
-          ? "http://localhost:3000/vacas"
-          : "http://localhost:3000/vacas/desactivadas";
+          ? "https://api-gestion-bovina.onrender.com/vacas"
+          : "https://api-gestion-bovina.onrender.com/vacas/desactivadas";
 
         const params = new URLSearchParams();
 

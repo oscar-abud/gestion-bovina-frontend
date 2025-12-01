@@ -33,7 +33,7 @@ export default function DataTable() {
     const getVacas = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:3000/vacas/all", {
+        const res = await fetch("https://api-gestion-bovina.onrender.com/vacas/all", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

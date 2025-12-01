@@ -61,7 +61,7 @@ export default function RegisterCow({ cowId }) {
         setSubmitError(null);
         const token = localStorage.getItem("token");
 
-        const res = await fetch(`http://localhost:3000/vacas/${cowId}`, {
+        const res = await fetch(`https://api-gestion-bovina.onrender.com/vacas/${cowId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -132,8 +132,8 @@ export default function RegisterCow({ cowId }) {
 
     try {
       const url = isEditMode
-        ? `http://localhost:3000/vacas/${cowId}`
-        : "http://localhost:3000/vacas";
+        ? `https://api-gestion-bovina.onrender.com/vacas/${cowId}`
+        : "https://api-gestion-bovina.onrender.com/vacas";
 
       const method = isEditMode ? "PUT" : "POST";
       const token = localStorage.getItem("token");
